@@ -56,9 +56,12 @@ def nextsong(event):
 def prevsong(event):
     global index
     index -= 1
-    pygame.mixer.music.load(listofsongs[index])
-    pygame.mixer.music.play()
-    updatelabel()
+    # print(index)
+    print(len(listofsongs))
+    if abs(index) <= len(listofsongs[index]):
+        pygame.mixer.music.load(listofsongs[index])
+        pygame.mixer.music.play()
+        updatelabel()
 
 
 def stopsong(event):
@@ -72,9 +75,14 @@ def pausesong(event):
     v.set("")
     #return songname
 
+def resumesong(event):
+    pygame.mixer.music.unpause()
+    v.set("")
 
 def playsong(event):
-    pygame.mixer.music.unpause()
+    global index
+    pygame.mixer.music.load(listofsongs[index])
+    pygame.mixer.music.play()
     v.set("")
     #return songname
 
@@ -107,6 +115,9 @@ stopbutton.pack()
 pausesong_btn = Button(root,text='Pause Music')
 pausesong_btn.pack()
 
+resumesong_btn = Button(root,text='Resume Music')
+resumesong_btn.pack()
+
 playsong_btn = Button(root,text='Play Music')
 playsong_btn.pack()
 
@@ -114,6 +125,7 @@ nextbutton.bind("<Button-1>",nextsong)
 previousbutton.bind("<Button-1>",prevsong)
 stopbutton.bind("<Button-1>",stopsong)
 pausesong_btn.bind("<Button-1>",pausesong)
+resumesong_btn.bind("<Button-1>",resumesong)
 playsong_btn.bind("<Button-1>",playsong)
 
 songlabel.pack()
