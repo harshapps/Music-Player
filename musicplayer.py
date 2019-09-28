@@ -60,9 +60,12 @@ def nextsong(event):
 def prevsong(event):
     global index
     index -= 1
-    pygame.mixer.music.load(listofsongs[index])
-    pygame.mixer.music.play()
-    updatelabel()
+    # print(index)
+    print(len(listofsongs))
+    if abs(index) <= len(listofsongs[index]):
+        pygame.mixer.music.load(listofsongs[index])
+        pygame.mixer.music.play()
+        updatelabel()
 
 
 def stopsong(event):
@@ -83,10 +86,17 @@ def playpausesong(event):
     # return songname
 
 
-# def playsong(event):
+def resumesong(event):
+    pygame.mixer.music.unpause()
+    v.set("")
 
-#     v.set("")
-#     # return songname
+
+def playsong(event):
+    global index
+    pygame.mixer.music.load(listofsongs[index])
+    pygame.mixer.music.play()
+    v.set("")
+    # return songname
 
 
 label = Label(root, text='Music Player')
