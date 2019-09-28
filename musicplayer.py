@@ -5,17 +5,17 @@ import pygame
 from mutagen.id3 import ID3
 from tkinter import *
 
-root = Tk()
-root.minsize(350,350)
 
+root = Tk()
+root.minsize(350, 350)
+playflag = False
 
 listofsongs = []
 realnames = []
 
 v = StringVar()
-songlabel = Label(root,textvariable=v,width=35)
+songlabel = Label(root, textvariable=v, width=35)
 
-index = 0
 
 def directorychooser():
 
@@ -29,21 +29,24 @@ def directorychooser():
             audio = ID3(realdir)
             realnames.append(audio['TIT2'].text[0])
 
-
             listofsongs.append(files)
-
 
     pygame.mixer.init()
     pygame.mixer.music.load(listofsongs[0])
-    #pygame.mixer.music.play()
+    # pygame.mixer.music.play()
 
+
+index = 1
 directorychooser()
+pygame.mixer.music.load(listofsongs[index])
+pygame.mixer.music.play()
+
 
 def updatelabel():
     global index
     global songname
     v.set(realnames[index])
-    #return songname
+    # return songname
 
 
 def nextsong(event):
@@ -52,6 +55,7 @@ def nextsong(event):
     pygame.mixer.music.load(listofsongs[index])
     pygame.mixer.music.play()
     updatelabel()
+
 
 def prevsong(event):
     global index
@@ -64,57 +68,63 @@ def prevsong(event):
 def stopsong(event):
     pygame.mixer.music.stop()
     v.set("")
-    #return songname
+    # return songname
 
 
-def pausesong(event):
-    pygame.mixer.music.pause()
+def playpausesong(event):
+    global playflag
+    if playflag:
+        pygame.mixer.music.unpause()
+        playflag = False
+    else:
+        pygame.mixer.music.pause()
+        playflag = True
     v.set("")
-    #return songname
+    # return songname
 
 
-def playsong(event):
-    pygame.mixer.music.unpause()
-    v.set("")
-    #return songname
+# def playsong(event):
+
+#     v.set("")
+#     # return songname
 
 
-label = Label(root,text='Music Player')
+label = Label(root, text='Music Player')
 label.pack()
 
 listbox = Listbox(root)
 listbox.pack()
 
-#listofsongs.reverse()
+# listofsongs.reverse()
 realnames.reverse()
 
 for items in realnames:
-    listbox.insert(0,items)
+    listbox.insert(0, items)
 
 realnames.reverse()
-#listofsongs.reverse()
+# listofsongs.reverse()
 
 
-nextbutton = Button(root,text = 'Next Song')
+nextbutton = Button(root, text='Next Song')
 nextbutton.pack()
 
-previousbutton = Button(root,text = 'Previous Song')
+previousbutton = Button(root, text='Previous Song')
 previousbutton.pack()
 
-stopbutton = Button(root,text='Stop Music')
+stopbutton = Button(root, text='Stop Music')
 stopbutton.pack()
 
-pausesong_btn = Button(root,text='Pause Music')
-pausesong_btn.pack()
+playpausesong_btn = Button(root, text='Play/Pause Music')
+playpausesong_btn.pack()
 
-playsong_btn = Button(root,text='Play Music')
-playsong_btn.pack()
+# playsong_btn = Button(root, text='Play Music')
+# playsong_btn.pack()
 
-nextbutton.bind("<Button-1>",nextsong)
-previousbutton.bind("<Button-1>",prevsong)
-stopbutton.bind("<Button-1>",stopsong)
-pausesong_btn.bind("<Button-1>",pausesong)
-playsong_btn.bind("<Button-1>",playsong)
+nextbutton.bind("<Button-1>", nextsong)
+previousbutton.bind("<Button-1>", prevsong)
+stopbutton.bind("<Button-1>", stopsong)
+playpausesong_btn.bind("<Button-1>", playpausesong)
+# playsong_btn.bind("<Button-1>", playsong)
 
 songlabel.pack()
 
